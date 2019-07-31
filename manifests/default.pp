@@ -1,3 +1,3 @@
 node default {
-	include rest_api
+  include rest_api
 }
