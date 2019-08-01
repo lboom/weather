@@ -16,7 +16,7 @@ Once the API key is in place the only command needed will be:
 
 # making requests
 --------------------
-Once the vm is up you can begin to make requests. Only GET has been implemented here so an example call would look like:
+Once the vm is up you can begin to make requests to http://localhost:8080. Only GET has been implemented here so an example call would look like:
 ```
 % curl -X GET 'http://localhost:8080/temperature'
 {query_time":"2019-08-01 03:06:29.697813","temperature":79.39}
