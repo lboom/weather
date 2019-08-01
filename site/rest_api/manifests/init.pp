@@ -44,6 +44,13 @@ class rest_api {
     require => File['/opt/rest'],
   }
 
+  file { '/opt/rest/pdx_weather.db':
+    source  => "puppet:///modules/rest_api/pdx_weather.db",
+    owner   => 'api',
+    group   => 'api',
+    require => File['/opt/rest'],
+  }
+
   # supervisor setup
   file { '/opt/rest/rest_supervisor.conf':
     source  => "puppet:///modules/rest_api/rest_supervisor.conf",
@@ -57,6 +64,7 @@ class rest_api {
     command => '/usr/bin/supervisord -c rest_supervisor.conf',
     cwd     => '/opt/rest',
     unless  => '/usr/bin/test -f /opt/rest/supervisord.pid',
-    require => File['/opt/rest/rest_supervisor.conf'],
+    require => File['/opt/rest/rest_supervisor.conf',
+                    '/opt/rest/pdx_weather.db'],
   }
 }
