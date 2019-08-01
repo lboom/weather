@@ -7,11 +7,11 @@ I used Vagrant 2.2.4 and VirtualBox 6.0.10 on Debian Linux (Debian GNU/Linux 9 (
 --------------------
 The Open Weather Map API requires a key to make requests. One has been provided via email and will need to be placed into the supervisor config file before deployment(./site/rest_api/files/rest_supervisor.conf):
 ```
-% s/paste_key_here/<api_key>/ site/rest_api/files/rest_supervisor.conf
+% sed -i s/paste_key_here/<api_key>/ site/rest_api/files/rest_supervisor.conf
 ```
 Once the API key is in place the only command needed will be:
 ```
-vagrant up
+% vagrant up
 ```
 
 # making requests
