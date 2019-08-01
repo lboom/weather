@@ -19,19 +19,19 @@ def check_db():
         return cached
     else:
         update_temp(api_key)
-        # call self here
-        #check_db()
-
-def convert_ts(ts):
-    """ convert datetime ts to human readable """
-    return datetime.datetime.fromtimestamp(ts).replace(microsecond=0).isoformat()
+        return check_db()
 
 def compare_ts(ts):
-    """ check current ts in DB """
-    return True
+    """ check current timestamp in DB """
+    current_time = datetime.datetime.utcnow()
+    cache_time = datetime.datetime.strptime(ts, "%Y-%m-%d %H:%M:%S.%f")
+    if cache_time + datetime.timedelta(minutes=5) > current_time:
+        return True
+    else:
+        return False
 
 def conn_db():
-    """ db connection """
+    """ DB connection """
     try:
         con = sqlite3.connect('pdx_weather.db')
         return con
@@ -49,9 +49,8 @@ def update_temp(key):
     except requests.exceptions.RequestException as err:
         print("Something went wrong: ", err)
     pdx_temp = req.json()['main']['temp']
-    ts = datetime.datetime.now().timestamp()
+    ts = datetime.datetime.utcnow()
 
-    # update record
     query = "UPDATE weather SET temp=(?), timestamp=(?) WHERE city='PDX'"
     c = conn_db()
     cur = c.cursor()
@@ -68,7 +67,7 @@ def return_temp():
     current_temp = check_db()
     ts = current_temp[1]
     c_temp = current_temp[0]
-    return jsonify({"query_time": convert_ts(ts), "temperature": c_temp })
+    return jsonify({"query_time": ts, "temperature": c_temp })
 
 if __name__ == '__main__':
     api.run(host='0.0.0.0', port=5000)
